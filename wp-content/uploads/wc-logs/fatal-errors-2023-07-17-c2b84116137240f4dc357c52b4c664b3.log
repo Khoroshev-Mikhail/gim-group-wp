@@ -1,0 +1,2 @@
+2023-07-17T10:16:02+00:00 CRITICAL Cannot redeclare feedback_theme_customizer() (previously declared in /Applications/MAMP/htdocs/gim-group-wp/wp-content/themes/gim-group/functions.php:170) in /Applications/MAMP/htdocs/gim-group-wp/wp-content/themes/gim-group/functions.php on line 226
+

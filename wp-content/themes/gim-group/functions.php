@@ -298,3 +298,80 @@ function about_theme_customizer($wp_customize) {
     ));
 }
 add_action('customize_register', 'about_theme_customizer');
+
+//Переименование
+// function rename_taxonomy_menu() {
+//     global $submenu;
+
+//     if (isset($submenu['edit.php'])) {
+//         foreach ($submenu['edit.php'] as $key => $menu_item) {
+//             if ($menu_item[0] == 'Рубрики') {
+//                 $submenu['edit.php'][$key][0] = 'Проекты';
+//                 break;
+//             }
+//         }
+//     }
+// }
+// add_action('admin_menu', 'rename_taxonomy_menu');
+
+// function rename_taxonomy_labels($labels) {
+//     $labels->name = 'Проекты';
+//     $labels->singular_name = 'Проект';
+//     $labels->menu_name = 'Проекты';
+//     return $labels;
+// }
+// add_filter('post_type_labels_category', 'rename_taxonomy_labels');
+
+// function rename_all_posts_menu($translated) {
+//     global $wp_post_types;
+
+//     if (isset($wp_post_types['post'])) {
+//         $labels = &$wp_post_types['post']->labels;
+//         $translated = str_replace('Все записи', 'Вся недвижимость', $translated);
+//     }
+
+//     return $translated;
+// }
+// add_filter('gettext', 'rename_all_posts_menu');
+
+// function rename_post_menu() {
+//     global $menu, $submenu;
+
+//     foreach ($menu as $key => $menu_item) {
+//         if ($menu_item[0] == 'Записи') {
+//             $menu[$key][0] = 'Недвижимость';
+//             break;
+//         }
+//     }
+
+//     if (isset($submenu['edit.php'])) {
+//         foreach ($submenu['edit.php'] as $key => $submenu_item) {
+//             if ($submenu_item[0] == 'Записи') {
+//                 $submenu['edit.php'][$key][0] = 'Недвижимость';
+//                 break;
+//             }
+//         }
+//     }
+// }
+// add_action('admin_menu', 'rename_post_menu');
+
+// function rename_post_labels($labels) {
+//     $labels->name = 'Недвижимость';
+//     $labels->singular_name = 'Недвижимость';
+//     return $labels;
+// }
+// add_filter('post_type_labels_post', 'rename_post_labels');
+
+
+
+// //Добавление шаблонов для записей
+// function load_custom_single_template($single_template) {
+//     global $post;
+
+//     if ($post->post_type == 'property') { // замените 'property' на ваш тип записей
+//         $single_template = get_template_directory() . '/single-templates/single-property.php';
+//     }
+
+//     return $single_template;
+// }
+// add_filter('single_template', 'load_custom_single_template');

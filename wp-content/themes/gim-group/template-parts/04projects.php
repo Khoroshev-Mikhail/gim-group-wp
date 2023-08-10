@@ -1,5 +1,24 @@
 <section class="_section mt-20">
     <div class="_wrapper">
+        <div>
+
+                <?php
+$parent_category = get_category_by_slug('nedvizhimost'); // Замените 'nedvizhimost' на слаг вашей категории "Недвижимость"
+$subcategories = get_categories(array('parent' => $parent_category->term_id, 'hide_empty' => false)); // Добавляем параметр 'hide_empty' => false
+
+// Вывод списка подкатегорий и их количество
+if ($subcategories) {
+    echo '<p>Количество подкатегорий: ' . count($subcategories) . '</p>';
+    echo '<ul>';
+    foreach ($subcategories as $subcategory) {
+        echo '<li><a href="' . get_category_link($subcategory->term_id) . '">' . $subcategory->name . '</a></li>';
+    }
+    echo '</ul>';
+}
+                ?>
+
+        </div>
+
         <h2 class="_h">Проекты</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-7 mt-7">
 

@@ -4,7 +4,7 @@
     <div class="_wrapper">
         <div class="w-full bg-white p-5 rounded-2xl">
             <h1 class="">
-                <?php the_title();?>
+                <?php the_title();?>ыыы
             </h1>
             <div class="">
                 <?php the_content();?>

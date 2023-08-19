@@ -18,7 +18,10 @@ register_nav_menus( array(
     'header-menu' => 'Верхнее меню (шапка)', 
     'footer-menu' => 'Нижнее меню (футер)', 
 ) );
-
+add_action( 'wp_enqueue_scripts', 'my_scripts_method' );
+function my_scripts_method(){
+	wp_enqueue_script( 'jquery' );
+}
 function default_theme_customizer($wp_customize) {
     $wp_customize->remove_section('static_front_page');
     $wp_customize->remove_section('custom_css');
@@ -358,3 +361,23 @@ function disable_comments_hide_existing_comments($comments) {
     return $comments;
 }
 add_filter('comments_array', 'disable_comments_hide_existing_comments', 10, 2);
+
+
+function get_acf_field_values($field) {
+    global $wpdb;
+
+    $query = 'SELECT DISTINCT meta_value
+          FROM ' . $wpdb->postmeta. '
+          WHERE meta_key = "' . $field . '"
+          ORDER BY meta_value';
+    $result = $wpdb->get_col($query); 
+    return $result;
+}
+
+function getUrl() {
+    $url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    $url = explode('?', $url);
+    $url = $url[0];
+    
+    return $url;
+}

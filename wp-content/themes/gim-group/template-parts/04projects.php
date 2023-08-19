@@ -37,7 +37,7 @@
                                     </p>
                                 </div>
                                 <p class="absolute bottom-[3%] xs:bottom-[12%] left-[6%] font-semibold text-[20px]">от 2 790 000 руб.</p>
-                                    </a>
+                            </a>
                         <?php
                     }
                 }

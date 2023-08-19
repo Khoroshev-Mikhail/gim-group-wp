@@ -1,5 +1,5 @@
-=== Advanced Custom Fields (ACF) ===
-Contributors: deliciousbrains, wpengine, elliotcondon, mattshaw, lgladdy, antpb, andrewbotz, dalewilliams, polevaultweb
+=== Advanced Custom Fields PRO ===
+Contributors: elliotcondon
 Tags: acf, fields, custom fields, meta, repeater
 Requires at least: 5.8
 Tested up to: 6.3

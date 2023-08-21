@@ -91,16 +91,16 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5  mt-10">
 
                 <div>
-                    <select class="w-full py-3.5 px-3 rounded-lg" name="rooms_apart">
-                        <option value="0">Количество комнат</option>
-                            <?php foreach(get_acf_field_values('rooms_apart') as $item): ?>
-                                <option value="<?=$item?>" <?=(!empty($_GET['rooms_apart']) && $_GET['rooms_apart'] == $item) ? 'selected' : ''?>><?=$item?></option>
+                    <select class="w-full py-3.5 px-3 rounded-lg" name="purpose_real">
+                        <option value="0">Назначение</option>
+                            <?php foreach(get_acf_field_values('purpose_real') as $item): ?>
+                                <option value="<?=$item?>" <?=(!empty($_GET['purpose_real']) && $_GET['purpose_real'] == $item) ? 'selected' : ''?>><?=$item?></option>
                             <?php endforeach;?>
                     </select>
                 </div>
                 <div>
                     <select class="w-full py-3.5 px-3 rounded-lg" name="s_apart">
-                        <option value="0">Площадь квартиры</option>
+                        <option value="0">Площадь</option>
                             <?php foreach(get_acf_field_values('s_apart') as $item): ?>
                                 <option value="<?=$item?>" <?=(!empty($_GET['s_apart']) && $_GET['s_apart'] == $item) ? 'selected' : ''?>><?=$item?></option>
                             <?php endforeach;?>
@@ -148,10 +148,10 @@
                 $current_page = get_query_var('paged') ? get_query_var('paged') : 1;
                 $current_term = get_queried_object(); 
                 $meta_query = [];
-                if (isset($_GET['rooms_apart']) && !empty($_GET['rooms_apart']) && $_GET['rooms_apart'] != 0) {
+                if (isset($_GET['purpose_real']) && !empty($_GET['purpose_real']) && $_GET['purpose_real'] != 0) {
                     $meta_query[] = array(
-                        'key' => 'rooms_apart',
-                        'value' => $_GET['rooms_apart'],
+                        'key' => 'purpose_real',
+                        'value' => $_GET['purpose_real'],
                         'compare' => 'IN',
                     );
                 }
@@ -190,7 +190,7 @@
                         ?>
                             <div class="flex flex-col p-5 justify-between aspect-square bg-white rounded-2xl">
                                 <div class="text-_dark-blue_for-text font-bold w-full md:w-7/12">
-                                    <?php echo get_field('rooms_apart', $post->ID); ?>-комнатная квартира
+                                    <?php echo get_field('purpose_real', $post->ID); ?>-комнатная квартира
                                 </div>
                                 <div class="h-2/3">
                                     <?php 

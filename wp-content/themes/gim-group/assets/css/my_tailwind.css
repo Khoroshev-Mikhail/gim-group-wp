@@ -35,4 +35,16 @@
     .md\:mt-0{
         margin-top: 0px;
     }
+    .md\:aspect-\[450\/100\]{
+        aspect-ratio:450/100
+    }
+}
+.object-none{
+    object-fit: none;
+}
+.object-contain{
+    object-fit: contain;
+}
+.object-cover{
+    object-fit: cover;
 }

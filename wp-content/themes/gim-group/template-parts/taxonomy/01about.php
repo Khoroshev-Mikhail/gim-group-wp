@@ -21,8 +21,53 @@
                         <p class="text-_dark-gray-for-text -mt-0.5 text-[12px] font-medium">Этажность</p>
                     </div>
                     <div>
-                        <p>34,4-135,6м2</p>
-                        <p class="text-_dark-gray-for-text -mt-0.5 text-[12px] font-medium">Площадь квартир</p>
+                        <p>
+                            <?php
+                                if(!empty($_GET['type']) && $_GET['type'] == 'real'){
+                                    $values = get_acf_field_values('s_real');
+                                    if (!empty($values)) {
+                                        $minValue = min($values);
+                                        $maxValue = max($values);
+
+                                        echo "$minValue - $maxValue м<sup>2</sup>";
+                                    } else {
+                                        echo "Различная";
+                                    }
+                                } else if(!empty($_GET['type']) && $_GET['type'] == 'parking'){
+                                    $values = get_acf_field_values('s_parking');
+                                    if (!empty($values)) {
+                                        $minValue = min($values);
+                                        $maxValue = max($values);
+
+                                        echo "$minValue - $maxValue м<sup>2</sup>";
+                                    } else {
+                                        echo "Различная";
+                                    }
+                                } else {
+                                    $values = get_acf_field_values('s_apart');
+                                    if (!empty($values)) {
+                                        $minValue = min($values);
+                                        $maxValue = max($values);
+
+                                        echo "$minValue - $maxValue м<sup>2</sup>";
+                                    } else {
+                                        echo "Различная";
+                                    }
+                                }
+                            ?>
+                        </p>
+                        <p class="text-_dark-gray-for-text -mt-0.5 text-[12px] font-medium">
+                            Площадь 
+                            <?php
+                                if(!empty($_GET['type']) && $_GET['type'] == 'real'){
+                                    echo 'помещений';
+                                } else if(!empty($_GET['type']) && $_GET['type'] == 'parking'){
+                                    echo 'машиномест';
+                                } else {
+                                    echo 'квартир';
+                                }
+                            ?>
+                        </p>
                     </div>
                 </div>
             </div>

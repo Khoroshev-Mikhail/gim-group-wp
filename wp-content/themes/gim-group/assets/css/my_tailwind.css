@@ -38,6 +38,9 @@
     .md\:aspect-\[450\/100\]{
         aspect-ratio:450/100
     }
+    .md\:aspect-\[450\/100\]{
+        aspect-ratio:450/100
+    }
 }
 .object-none{
     object-fit: none;

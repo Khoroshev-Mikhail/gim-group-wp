@@ -83,18 +83,25 @@
 <?php
     $current_page = get_query_var('paged') ? get_query_var('paged') : 1;
     $current_term = get_queried_object(); 
-    $posts_per_page = 10;
+    $posts_per_page = 15;
     $url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    if(!empty($_GET['type']) && $_GET['type'] == 'real'){
+        $post_type = 'real';
+    } else if(!empty($_GET['type']) && $_GET['type'] == 'parking'){
+        $post_type = 'parking';
+    } else{
+        $post_type = 'apart';
+    }
 ?>
 <section class="_section mt-5">
     <div class="_wrapper flex flex-col ">
         
         <div class="mt-5">
-            <h2 class="block text-_blue_for-text text-[32px]">
+            <h2 id="choose" class="block text-_blue_for-text text-[32px]">
             <?php
-                if(!empty($_GET['type']) && $_GET['type'] == 'real'){
+                if($post_type == 'real'){
                     echo 'Выбор коммерческой недвижимости';
-                } else if(!empty($_GET['type']) && $_GET['type'] == 'parking'){
+                } else if($post_type == 'parking'){
                     echo 'Выбор машиноместа';
                 } else{
                     echo 'Выбор квартиры';
@@ -103,23 +110,17 @@
             </h2>
         </div>
         
-        <form method="get" action="<?php echo $url; ?>" id="filter">
+        <form method="get" action="<?php echo $url . '#choose'; ?>" id="filter">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5  mt-10">
                 
                 <?php 
-                    if(empty($_GET['type']) || !empty($_GET['type']) && $_GET['type'] == 'real'){
+                    if($post_type == 'apart' || $post_type == 'real'){
                 ?>
                     <div>
-                        <select class="w-full py-3.5 px-3 rounded-lg" name="rooms_apart">
+                        <select class="w-full py-3.5 px-3 rounded-lg" name="rooms">
                             <option value="0">Количество комнат</option>
-                                <?php 
-                                    if(!empty($_GET['type']) && $_GET['type'] == 'real'){
-                                        $rooms = 'rooms_real';
-                                    }else{
-                                        $rooms = 'rooms_apart';
-                                    }
-                                    foreach(get_acf_field_values($rooms) as $item): ?>
-                                        <option value="<?=$item?>" <?=(!empty($_GET[$rooms]) && $_GET[$rooms] == $item) ? 'selected' : ''?>><?=$item?></option>
+                                <?php foreach(get_acf_field_values('rooms_' . $post_type) as $item): ?>
+                                    <option value="<?=$item?>" <?=(!empty($_GET['rooms']) && $_GET['rooms'] == $item) ? 'selected' : ''?>><?=$item?></option>
                                 <?php endforeach;?>
                         </select>
                     </div>
@@ -127,79 +128,67 @@
                     }
                 ?>
                 <div>
-                    <select class="w-full py-3.5 px-3 rounded-lg" name="s_apart">
+                    <select class="w-full py-3.5 px-3 rounded-lg" name="s">
                         <option value="0">
                             <?php
-                                if(!empty($_GET['type']) && $_GET['type'] == 'real'){
+                                if($post_type == 'real'){
                                     echo 'Площадь помещения';
-                                } else if(!empty($_GET['type']) && $_GET['type'] == 'parking'){
+                                } else if($post_type == 'parking'){
                                     echo 'Площадь машиноместа';
                                 } else{
                                     echo 'Площадь квартиры';
                                 }
                             ?>
                         </option>
-                        <?php
-                            if(!empty($_GET['type']) && $_GET['type'] == 'real'){
-                                $s = 's_real';
-                            } else if(!empty($_GET['type']) && $_GET['type'] == 'parking'){
-                                $s = 's_parking';
-                            } else{
-                                $s = 's_apart';
-                            }
-                            foreach(get_acf_field_values($s) as $item): 
-                        ?>
-                            <option value="<?=$item?>" <?=(!empty($_GET[$s]) && $_GET[$s] == $item) ? 'selected' : ''?>><?=$item?></option>
+                        <?php foreach(get_acf_field_values('s_' . $post_type) as $item): ?>
+                            <option value="<?=$item?>" <?=(!empty($_GET['s']) && $_GET['s'] == $item) ? 'selected' : ''?>><?=$item?></option>
                         <?php endforeach;?>
                     </select>
                 </div>
                 
-                <?php 
-                    if(!empty($_GET['type']) && $_GET['type'] == 'real'){
-                ?>
-                        <div class="">
-                            <select class="w-full py-3.5 px-3 rounded-lg" name="purpose_real">
-                                <option value="0">Назначение помещения</option>
-                                    <?php foreach(get_field('purpose_real') as $item): ?>
-                                        <option value="<?=$item?>" <?=(!empty($_GET['purpose_real']) && $_GET['purpose_real'] == $item) ? 'selected' : ''?>><?=$item?></option>
-                                    <?php endforeach;?>
-                            </select>
-                        </div>
+                <?php if($post_type == 'real'){ ?>
+                    <div class="">
+                        <select class="w-full py-3.5 px-3 rounded-lg" name="purpose">
+                            <option value="0">Назначение помещения</option>
+                                <?php foreach(get_field('purpose_real') as $item): ?>
+                                    <option value="<?=$item?>" <?=(!empty($_GET['purpose_real']) && $_GET['purpose_real'] == $item) ? 'selected' : ''?>><?=$item?></option>
+                                <?php endforeach;?>
+                        </select>
+                    </div>
                 <?php
                     } else{
                         ?>
-                            <div class="hidden md:block">
-
-                            </div>
+                            <div class="hidden md:block"></div>
                         <?php
                     }
                 ?>
-                <?php 
-                    if(!empty($_GET['type']) && $_GET['type'] == 'parking'){
-                ?>
+                <?php if($post_type == 'parking'){ ?>
                     <div class="hidden md:block"></div>
-                <?php
-                    }
-                ?>
+                <?php } ?>
 
+                <?php
+                    $min_price = min(get_acf_field_values('price_' . $post_type) ? get_acf_field_values('price_' . $post_type) : [0]);
+                    $max_price = max(get_acf_field_values('price_' . $post_type) ? get_acf_field_values('price_' . $post_type) : [30000000]); 
+                ?>
                 <div class="flex justify-between">
                     <div class="w-1/2 flex flex-col">
-                        <input type="text" name="price_apart_from" value="<?=(!empty($_GET['price_apart_from'])) ? $_GET['price_apart_from'] : min(get_acf_field_values('price_apart'))?>"  class="w-full p-3 rounded-l-xl border-r-[1px]"/>
-                        <input type="range" class="w-[calc(100%-12px)] ml-auto block h-[1px]"/>
+                        <input type="number" name="price_from" value="<?=(!empty($_GET['price_from'])) ? $_GET['price_from'] : $min_price; ?>"  class="w-full p-3 rounded-l-xl border-r-[1px]"/>
+                        <input min="<?php echo $min_price; ?>" max="<?php echo $max_price ?>" type="range" class="w-[calc(100%-12px)] ml-auto block h-[1px]"/>
                     </div>
                     <div class="w-1/2 flex flex-col">
-                        <input type="text" name="price_apart_to" value="<?=(!empty($_GET['price_apart_to'])) ? $_GET['price_apart_to'] : max(get_acf_field_values('price_apart'))?>"   class="w-full p-3 rounded-r-xl"/>
-                        <input type="range" class="w-[calc(100%-12px)] mr-auto block h-[1px]"/>
+                        <input type="number" name="price_to" value="<?=(!empty($_GET['price_to'])) ? $_GET['price_to'] : $max_price;?>"   class="w-full p-3 rounded-r-xl"/>
+                        <input min="<?php echo $min_price; ?>" max="<?php echo $max_price; ?>" type="range" class="w-[calc(100%-12px)] mr-auto block h-[1px]"/>
                     </div>
                 </div>
                 <div class="w-full flex justify-between col-span-1 md:col-span-3">
-                    <button class="flex flex-col h-full justify-center">
+                    <button class="hidden flex flex-col h-full justify-center">
                         <div class="bg-white rounded-xl p-3">
                             <span class="text-red-500 pr-1">%</span>Акция
                         </div>
                     </button>
-                    <button type="submit" name="type" 
-                        value="<?php echo $_GET['type'];?>" 
+                    <button type="submit" 
+                        name="<?php echo (!empty($_GET['type']) && $_GET['type'] !== '') ? 'type' : ''; ?>"
+                        value="<?php echo (!empty($_GET['type']) && $_GET['type'] !== '') ? $_GET['type'] : ''; ?>" 
                         class="flex flex-col h-full">
                             <div class="bg-white rounded-xl p-3">
                                 Применить
@@ -218,53 +207,140 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-10">
             <?php
                 $meta_query = [];
-                if (isset($_GET['rooms_apart']) && !empty($_GET['rooms_apart']) && $_GET['rooms_apart'] != 0) {
-                    $meta_query[] = array(
-                        'key' => 'rooms_apart',
-                        'value' => $_GET['rooms_apart'],
-                        'compare' => 'IN',
-                    );
-                }
+                if($post_type == 'real'){
+                    if (isset($_GET['rooms']) && !empty($_GET['rooms']) && $_GET['rooms'] != 0) {
+                        $meta_query[] = array(
+                            'key' => 'rooms_real',
+                            'value' => $_GET['rooms'],
+                            'compare' => 'IN',
+                        );
+                    }
+    
+                    if (isset($_GET['s']) && !empty($_GET['s']) && $_GET['s'] != 0) {
+                        $meta_query[] = array(
+                            'key' => 's_real',
+                            'value' => $_GET['s'],
+                            'compare' => 'IN',
+                        );
+                    }
 
-                if (isset($_GET['s_apart']) && !empty($_GET['s_apart']) && $_GET['s_apart'] != 0) {
-                    $meta_query[] = array(
-                        'key' => 's_apart',
-                        'value' => $_GET['s_apart'],
-                        'compare' => 'IN',
-                    );
-                }
-
-                if (isset($_GET['price_apart_from']) && !empty($_GET['price_apart_to'])) {
-                    $meta_query[] = array(
-                        'key' => 'price_apart',
-                        'value' => [$_GET['price_apart_from'], $_GET['price_apart_to']],
-                        'compare' => 'BETWEEN',
-                    );
-                } 
-
-                $related_posts = get_posts(array(
-                    'post_type' => 'apart',
-                    'tax_query' => array(
-                        array(
-                            'taxonomy' => $current_term->taxonomy,
-                            'field'    => 'term_id',
-                            'terms'    => $current_term->term_id,
+                    if (isset($_GET['purpose']) && !empty($_GET['purpose']) && $_GET['purpose'] != 0) {
+                        $meta_query[] = array(
+                            'key' => 'purpose_real',
+                            'value' => $_GET['purpose'],
+                            'compare' => 'IN',
+                        );
+                    }
+    
+                    if (isset($_GET['price_from']) && !empty($_GET['price_to'])) {
+                        $meta_query[] = array(
+                            'key' => 'price_real',
+                            'value' => [$_GET['price_from'], $_GET['price_to']],
+                            'compare' => 'BETWEEN',
+                        );
+                    } 
+    
+                    $related_posts = get_posts(array(
+                        'post_type' => 'real',
+                        'tax_query' => array(
+                            array(
+                                'taxonomy' => $current_term->taxonomy,
+                                'field'    => 'term_id',
+                                'terms'    => $current_term->term_id,
+                            ),
                         ),
-                    ),
-                    'meta_query' => $meta_query,
-                    'posts_per_page' => $posts_per_page,
-                    'paged' => $paged,
-                ));
+                        'meta_query' => $meta_query,
+                        'posts_per_page' => $posts_per_page,
+                        'paged' => $paged,
+                    ));
+                } else if($post_type == 'parking'){    
+                    if (isset($_GET['s']) && !empty($_GET['s']) && $_GET['s'] != 0) {
+                        $meta_query[] = array(
+                            'key' => 's_parking',
+                            'value' => $_GET['s'],
+                            'compare' => 'IN',
+                        );
+                    }
+    
+                    if (isset($_GET['price_apart_from']) && !empty($_GET['price_apart_to'])) {
+                        $meta_query[] = array(
+                            'key' => 'price_parking',
+                            'value' => [$_GET['price_from'], $_GET['price_to']],
+                            'compare' => 'BETWEEN',
+                        );
+                    } 
+    
+                    $related_posts = get_posts(array(
+                        'post_type' => 'parking',
+                        'tax_query' => array(
+                            array(
+                                'taxonomy' => $current_term->taxonomy,
+                                'field'    => 'term_id',
+                                'terms'    => $current_term->term_id,
+                            ),
+                        ),
+                        'meta_query' => $meta_query,
+                        'posts_per_page' => $posts_per_page,
+                        'paged' => $paged,
+                    ));
+                } else{
+                    if (isset($_GET['rooms']) && !empty($_GET['rooms']) && $_GET['rooms'] != 0) {
+                        $meta_query[] = array(
+                            'key' => 'rooms_apart',
+                            'value' => $_GET['rooms'],
+                            'compare' => 'IN',
+                        );
+                    }
+    
+                    if (isset($_GET['s']) && !empty($_GET['s']) && $_GET['s'] != 0) {
+                        $meta_query[] = array(
+                            'key' => 's_apart',
+                            'value' => $_GET['s'],
+                            'compare' => 'IN',
+                        );
+                    }
+    
+                    if (isset($_GET['price_from']) && !empty($_GET['price_to'])) {
+                        $meta_query[] = array(
+                            'key' => 'price_apart',
+                            'value' => [$_GET['price_from'], $_GET['price_to']],
+                            'compare' => 'BETWEEN',
+                        );
+                    } 
+    
+                    $related_posts = get_posts(array(
+                        'post_type' => 'apart',
+                        'tax_query' => array(
+                            array(
+                                'taxonomy' => $current_term->taxonomy,
+                                'field'    => 'term_id',
+                                'terms'    => $current_term->term_id,
+                            ),
+                        ),
+                        'meta_query' => $meta_query,
+                        'posts_per_page' => $posts_per_page,
+                        'paged' => $paged,
+                    ));
+                }
+                
                 if ($related_posts) {
                     foreach ($related_posts as $post) {
                         ?>
                             <div class="flex flex-col p-5 justify-between aspect-square bg-white rounded-2xl">
-                                <div class="text-_dark-blue_for-text font-bold w-full md:w-7/12">
-                                    <?php echo get_field('rooms_apart', $post->ID); ?>-комнатная квартира
+                                <div class="text-_dark-blue_for-text font-bold w-full">
+                                    <?php
+                                        if($post_type == 'real'){
+                                            echo get_field('rooms_real', $post->ID) . '-комнатное помещение №';
+                                        } else if($post_type == 'apart'){
+                                            echo get_field('rooms_apart', $post->ID) . '-комнатная квартира №';
+                                        } else if($post_type == 'parking'){
+                                            echo 'Машиноместо №';
+                                        }
+                                    ?>
                                 </div>
                                 <div class="h-2/3">
                                     <?php 
-                                        $images = get_field('images_apart', $post->ID); 
+                                        $images = get_field('images_' . $post_type, $post->ID); 
                                         if (is_array($images) && !empty($images)) {
                                             ?>
                                                 <img src="<?php echo esc_url($images[0]['url']); ?>" alt="" class="h-full mx-auto" onclick="open_slider('<?php echo '#slider-' . $post->ID;?>')"/>
@@ -294,21 +370,23 @@
                                                 </div>
                                             <?php
                                         } else {
-                                            echo '<img src="' . get_template_directory_uri() . '/assets/images/taxonomy/projects/clear.png" alt="" class="h-full mx-auto"/>';
+                                            echo '<img src="' . get_template_directory_uri() . '/assets/images/taxonomy/projects/no-image.png" alt="" class="h-full mx-auto"/>';
                                         }
                                     ?>
                                 </div>
                                 <div class="flex justify-between">
                                     <div class="text-_dark-blue_for-text font-bold">
-                                        <?php echo get_field('s_apart', $post->ID); ?> м2
+                                        <?php echo get_field('s_' . $post_type, $post->ID); ?> м2
                                     </div>
                                     <div>
-                                        <?php echo get_field('price_apart', $post->ID); ?> руб.
+                                        <?php echo get_field('price_' . $post_type, $post->ID); ?> руб.
                                     </div>
                                 </div>
                             </div>
                         <?php
                     }
+                } else{
+                    echo '<h2 class="w-full text-_blue_for-text text-[20px]">По выбранным фильтрам недвижимости нет!</h2>';
                 }
             ?>
         </div>
@@ -317,7 +395,7 @@
             <div class="flex gap-x-2 navigation">
                 <?php
                     $all_related_posts = get_posts(array(
-                        'post_type' => 'apart',
+                        'post_type' => $post_type,
                         'tax_query' => array(
                             array(
                                 'taxonomy' => $current_term->taxonomy,
@@ -329,10 +407,10 @@
                         'posts_per_page' => -1, 
                     ));
                     echo paginate_links(array(
-                        'total' => ceil(count($all_related_posts) / 10),
+                        'total' => ceil(count($all_related_posts) / $posts_per_page),
                         'current' => $paged,
-                        'prev_text' => 'Prev',
-                        'next_text' => 'Next',
+                        'prev_text' => '',
+                        'next_text' => '',
                     ));
                 ?>
             </div>

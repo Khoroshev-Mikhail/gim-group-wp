@@ -172,12 +172,12 @@
                 ?>
                 <div class="flex justify-between">
                     <div class="w-1/2 flex flex-col">
-                        <input type="number" name="price_from" value="<?=(!empty($_GET['price_from'])) ? $_GET['price_from'] : $min_price; ?>"  class="w-full p-3 rounded-l-xl border-r-[1px]"/>
-                        <input min="<?php echo $min_price; ?>" max="<?php echo $max_price ?>" type="range" class="w-[calc(100%-12px)] ml-auto block h-[1px]"/>
+                        <input id="price_from_input" onchange="input_handler(this, 'price_from_range')" type="number" name="price_from" value="<?=(!empty($_GET['price_from'])) ? $_GET['price_from'] : $min_price; ?>"  class="w-full p-3 rounded-l-xl border-r-[1px]"/>
+                        <input id="price_from_range" onchange="input_handler(this, 'price_from_input')" min="<?php echo $min_price; ?>" max="<?php echo $max_price ?>" value="<?=(!empty($_GET['price_from'])) ? $_GET['price_from'] : $min_price; ?>" type="range" class="w-[calc(100%-12px)] ml-auto block h-[1px]"/>
                     </div>
                     <div class="w-1/2 flex flex-col">
-                        <input type="number" name="price_to" value="<?=(!empty($_GET['price_to'])) ? $_GET['price_to'] : $max_price;?>"   class="w-full p-3 rounded-r-xl"/>
-                        <input min="<?php echo $min_price; ?>" max="<?php echo $max_price; ?>" type="range" class="w-[calc(100%-12px)] mr-auto block h-[1px]"/>
+                        <input id="price_to_input" onchange="input_handler(this, 'price_to_range')" type="number" name="price_to" value="<?=(!empty($_GET['price_to'])) ? $_GET['price_to'] : $max_price;?>"   class="w-full p-3 rounded-r-xl"/>
+                        <input id="price_to_range" onchange="input_handler(this, 'price_to_input')" min="<?php echo $min_price; ?>" max="<?php echo $max_price; ?>" value="<?=(!empty($_GET['price_to'])) ? $_GET['price_to'] : $max_price;?>" type="range" class="w-[calc(100%-12px)] mr-auto block h-[1px]"/>
                     </div>
                 </div>
                 <div class="w-full flex justify-between col-span-1 md:col-span-3">
@@ -435,6 +435,11 @@
         spaceBetween: 300,
         slidesPerView: 1,
     });
+
+    function input_handler({value}, id){
+        const pairElement = document.getElementById(id);
+        pairElement.value = value;
+    }
 </script>
 
 

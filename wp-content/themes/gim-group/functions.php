@@ -381,3 +381,66 @@ function getUrl() {
     
     return $url;
 }
+function remove_title_field() {
+    remove_post_type_support('apart', 'title');
+    remove_post_type_support('real', 'title');
+    remove_post_type_support('parking', 'title');
+    remove_post_type_support('slider', 'title');
+    remove_post_type_support('document', 'title');
+}
+add_action('init', 'remove_title_field');
+
+function remove_editor_field() {
+    remove_post_type_support('apart', 'editor');
+    remove_post_type_support('real', 'editor');
+    remove_post_type_support('parking', 'editor');
+    remove_post_type_support('slider', 'editor');
+    remove_post_type_support('document', 'editor');
+}
+add_action('init', 'remove_editor_field');
+
+
+function replace_title_slider($title, $post_id) {
+    if (get_post_type($post_id) === 'slider') {
+        $title = get_field('title_slider', $post_id);
+        if ($title) {
+            return $title;
+        } else {
+            return 'Без заголовка';
+        }
+    }
+    return $title;
+}
+add_filter('the_title', 'replace_title_slider', 10, 2);
+
+function replace_title_with_custom_field($title, $post_id) {
+    $post_type = get_post_type($post_id);
+    $field_mappings = array(
+        'apart' => 'number_apart',
+        'real' => 'number_real',
+        'parking' => 'number_parking',
+        'document' => 'title_document'
+    );
+    
+    if (array_key_exists($post_type, $field_mappings)) {
+        $custom_field = get_field($field_mappings[$post_type], $post_id);
+        if ($custom_field) {
+            return $custom_field;
+        } else {
+            return 'Без номера';
+        }
+    }
+    
+    return $title;
+}
+
+add_filter('the_title', 'replace_title_with_custom_field', 10, 2);
+
+
+
+
+
+
+
+
+

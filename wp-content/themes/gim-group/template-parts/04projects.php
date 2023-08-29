@@ -1,4 +1,4 @@
-<section class="_section mt-20">
+<section class="_section mt-14">
     <div class="_wrapper">
         <h2 class="_h">Проекты</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-7 mt-7">

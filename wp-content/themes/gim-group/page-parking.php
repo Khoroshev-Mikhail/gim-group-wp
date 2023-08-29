@@ -1,4 +1,4 @@
-<?php /* Template Name: Коммерческая недвижимость */ ?>
+<?php /* Template Name: Машиноместа */ ?>
 
 <?php get_header(); ?>
 

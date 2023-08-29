@@ -13,7 +13,7 @@
                         $project_image = get_field('image_project', 'project_' . $project->term_id);
                         ?>
                             <a href="<?php echo get_term_link($project) . '?type=real'; ?>" class="block relative aspect-[225/100]  rounded-2xl text-white">
-                                <img src="<?php echo $project_image['url']; ?>" class="w-full h-full object-cover rounded-2xl" />
+                                <img src="<?php echo $project_image['url']; ?>" class="w-full h-full rounded-2xl" />
                                 <div class="absolute w-full top-[14%] left-[7%] flex gap-x-2">
                                     <?php 
                                         $checkboxes_project = get_field('checkboxes_project', 'project_' . $project->term_id);

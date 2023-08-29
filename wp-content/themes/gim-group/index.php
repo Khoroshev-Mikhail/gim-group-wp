@@ -2,7 +2,8 @@
 
 <div class="container">
     <?php 
-        get_template_part('template-parts/02header');
+        // get_template_part('template-parts/02header');
+        get_template_part('template-parts/02slider');
         get_template_part('template-parts/03callback');
         get_template_part('template-parts/04projects');
         get_template_part('template-parts/05calculator');

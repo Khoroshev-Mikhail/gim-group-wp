@@ -51,6 +51,7 @@
                             <button class="bg-_blue-button text-white w-full rounded-lg p-3 mt-3">
                                 Получить одобрение онлайн
                             </button>
+                            <!-- https://domclick.ru/ipoteka/calculator?showMlandAuth=true&from=sbercalc&utm_source=sberbank&utm_medium=referral&utm_campaign=calc&prod=3&categoryCode=salaryClient&term=30&dep=600000&cost=3000000&subproductCode=15110&discountIds=[1,7,19]&disabledDiscountIds=[] -->
                         </div>
                     </div>
                     <div class="flex flex-col w-2/5 justify-between pl-5">

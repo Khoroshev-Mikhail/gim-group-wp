@@ -330,11 +330,11 @@
                                 <div class="text-_dark-blue_for-text font-bold w-full">
                                     <?php
                                         if($post_type == 'real'){
-                                            echo get_field('rooms_real', $post->ID) . '-комнатное помещение №';
+                                            echo get_field('rooms_real', $post->ID) . '-комнатное помещение №' . get_field('number_real', $post->ID);
                                         } else if($post_type == 'apart'){
-                                            echo get_field('rooms_apart', $post->ID) . '-комнатная квартира №';
+                                            echo get_field('rooms_apart', $post->ID) . '-комнатная квартира №' . get_field('number_apart', $post->ID);
                                         } else if($post_type == 'parking'){
-                                            echo 'Машиноместо №';
+                                            echo 'Машиноместо №'. get_field('number_parking', $post->ID);
                                         }
                                     ?>
                                 </div>
